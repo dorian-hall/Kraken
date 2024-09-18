@@ -2,6 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * TODO
+ * Jumping in Global Gravity 
+ * Rotataion Should not be effect by Surface normals 
+ * able to walk to all surface regarless of angle 
+*/
+
+
 [RequireComponent(typeof(Rigidbody))] 
 public class Movement : MonoBehaviour
 {
