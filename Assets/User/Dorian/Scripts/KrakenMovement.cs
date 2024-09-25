@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting.Antlr3.Runtime.Collections;
 using UnityEngine;
 
 public class KrakenMovement : MonoBehaviour
@@ -12,6 +13,7 @@ public class KrakenMovement : MonoBehaviour
     [SerializeField] Check CliffCheck;
     [SerializeField] LayerMask RaycastLayerMask;
 
+    [SerializeField] float speed;
     [SerializeField] float Gravity;
     [SerializeField] AnimationCurve LerpCurve;
 
@@ -38,38 +40,41 @@ public class KrakenMovement : MonoBehaviour
     void Update()
     {
         MovementOffset = _Controls.actionmap.Movemnet.ReadValue<Vector2>();
-        Debug.Log("raw"+MovementOffset);
     }
     private void FixedUpdate()
     {
-        RaycastHit hit;
-        if (GroundCheck.Cast(out hit))
+        RaycastHit Groundhit;
+        if (GroundCheck.Cast(out Groundhit))
         {
             _Rigidbody.velocity = Vector3.zero;
-            transform.up = hit.normal;
-            Debug.Log("offset" + (Vector3)MovementOffset * Time.fixedDeltaTime);
-            transform.position += transform.InverseTransformPoint( transform.localPosition+new Vector3( MovementOffset.x,0, MovementOffset.y) * Time.fixedDeltaTime);
-
+            transform.up = Groundhit.normal;
         }
         else
         {
             _Rigidbody.velocity += Vector3.up * Gravity * Time.fixedDeltaTime;
             transform.up = Vector3.up;
         }
+        RaycastHit Wallhit;
+        if (WallCheck.Cast(out Wallhit))
+        {
+            Debug.Log("wallhit");
+            _Rigidbody.velocity = Vector3.zero;
+            transform.up = Wallhit.normal;
+        }
+        transform.GetChild(0).transform.forward = MovementOffset.normalized/2;
+        transform.position += transform.right * MovementOffset.normalized.x * speed * Time.fixedDeltaTime;
+        transform.position += transform.forward * MovementOffset.normalized.y * speed * Time.fixedDeltaTime;
     }
 
     private void OnDrawGizmos()
     {
         Gizmos.color = GroundCheck.DebugColor;
-        Gizmos.DrawSphere(GroundCheck.Transform.position + GroundCheck.direction.normalized * GroundCheck.Raylength, 0.1f);
         Gizmos.DrawRay(GroundCheck.Transform.position, GroundCheck.direction.normalized * GroundCheck.Raylength);
 
         Gizmos.color = WallCheck.DebugColor;
-        Gizmos.DrawSphere(WallCheck.Transform.position + WallCheck.direction.normalized * WallCheck.Raylength, 0.1f);
-        Gizmos.DrawRay(WallCheck.Transform.position, WallCheck.direction.normalized * WallCheck.Raylength);
+        Gizmos.DrawRay(WallCheck.lastray);
 
         Gizmos.color = CliffCheck.DebugColor;
-        Gizmos.DrawSphere(CliffCheck.Transform.position + CliffCheck.direction.normalized * CliffCheck.Raylength, 0.1f);
         Gizmos.DrawRay(CliffCheck.Transform.position, CliffCheck.direction.normalized * CliffCheck.Raylength);
     }
     [Serializable]
@@ -78,12 +83,17 @@ public class KrakenMovement : MonoBehaviour
         public Transform Transform;
         public float Raylength;
         public bool invert;
+        public bool local;
         public Vector3 direction;
         public Color DebugColor;
         [NonSerialized] public LayerMask Raylayermask;
+        [NonSerialized] public Ray lastray ;
         public bool Cast(out RaycastHit hit)
         {
-            bool hashit = Physics.Raycast(new Ray(Transform.position, direction), out hit, Raylength,Raylayermask);
+            
+            if (local) { lastray = new Ray(Transform.position, Transform.parent.TransformDirection(direction)); }
+            else { lastray =  new Ray(Transform.position, direction); }
+            bool hashit = Physics.Raycast(lastray, out hit, Raylength, Raylayermask);
             if (invert) { hashit = !hashit; }
             return hashit;
         }
