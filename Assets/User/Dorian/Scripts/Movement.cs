@@ -38,15 +38,18 @@ public class Movement : MonoBehaviour
         myTransform = transform;
         rigidbody = GetComponent<Rigidbody>();
         rigidbody.freezeRotation = true; // disable physics rotation
-                                         // distance from transform.position to ground
         distGround = boxCollider.size.y - boxCollider.center.y;
 
     }
 
     private void FixedUpdate()
     {
+        Vector3 Direction;
+        if (isGrounded) { Direction = myNormal; }
+        else { Direction = Vector3.up; }
+
         // apply constant weight force according to character normal:
-        rigidbody.AddForce(-gravity * rigidbody.mass * myNormal);
+        rigidbody.AddForce(-gravity * rigidbody.mass * Direction);
     }
 
     private void Update()
@@ -59,20 +62,23 @@ public class Movement : MonoBehaviour
 
         if (Input.GetButtonDown("Jump"))
         { // jump pressed:
-            ray = new Ray(myTransform.position, myTransform.forward);
-            if (Physics.Raycast(ray, out hit, jumpRange))
-            { // wall ahead?
-                JumpToWall(hit.point, hit.normal); // yes: jump to the wall
-            }
-            else if (isGrounded)
+
+            if (isGrounded)
             { // no: if grounded, jump up
                 rigidbody.velocity += jumpSpeed * myNormal;
             }
         }
 
-        // movement code - turn left/right with Horizontal axis:
-        myTransform.Rotate(0, Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime, 0);
+        ray = new Ray(myTransform.position, myTransform.forward);
+        if (Physics.Raycast(ray, out hit, 1))
+        { // wall ahead?
+            JumpToWall(hit.point, hit.normal); // yes: jump to the wall
+        }
+
+        // movement code - turn left/right with Mouse:
+        myTransform.Rotate(0, Input.GetAxis("Mouse X") * turnSpeed * Time.deltaTime, 0);
         // update surface normal and isGrounded:
+
         ray = new Ray(myTransform.position, -myNormal); // cast ray downwards
         if (Physics.Raycast(ray, out hit))
         { // use it to update myNormal and isGrounded
@@ -100,11 +106,10 @@ public class Movement : MonoBehaviour
         // jump to wall
         jumping = true; // signal it's jumping to wall
         
-        //rigidbody.isKinematic = true; // disable physics while jumping
-        rigidbody.useGravity = true;
+        rigidbody.isKinematic = true; // disable physics while jumping
         Vector3 orgPos = myTransform.position;
         Quaternion orgRot = myTransform.rotation;
-        Vector3 dstPos = point+ transform.forward * (distGround + 0.5f); // will jump to 0.5 above wall
+        Vector3 dstPos = point;//+ transform.forward * (distGround + 5f); // will jump to 0.5 above wall
         Vector3 myForward = Vector3.Cross(myTransform.right, normal);
         Quaternion dstRot = Quaternion.LookRotation(myForward, normal);
 
