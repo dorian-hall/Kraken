@@ -16,9 +16,9 @@
                 },
                 {
                     "name": "Jump",
-                    "type": "Value",
+                    "type": "Button",
                     "id": "854efb45-638b-4180-b84b-057d63516c9e",
-                    "expectedControlType": "Axis",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -37,6 +37,15 @@
                     "type": "Button",
                     "id": "f85466e4-993e-421c-9185-5c1cdba322ff",
                     "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Power",
+                    "type": "Button",
+                    "id": "3eb3c141-b995-46af-88a7-ee517f38fa0e",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -128,6 +137,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Exit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cb4f4b8b-28c6-4ea9-936e-419f6fef73ab",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Power",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

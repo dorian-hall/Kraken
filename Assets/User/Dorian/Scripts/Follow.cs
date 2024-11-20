@@ -5,6 +5,9 @@ using UnityEngine.UIElements;
 
 public class Follow : MonoBehaviour
 {
+    [SerializeField] float maxRotation;
+    [SerializeField] float minRotation;
+
     [SerializeField] Transform Target;
     [Header("Position")]
     [SerializeField] bool followPosition;
@@ -19,8 +22,10 @@ public class Follow : MonoBehaviour
     void Update()
     {
         RotationOffset.x += Input.GetAxis("Mouse Y") * 90 * Time.deltaTime;
-        //RotationOffset.y += Input.GetAxis("Mouse X") * 90 * Time.deltaTime;
-        if (followPosition) { transform.position = Target.position + PositionOffset; }
+        if(RotationOffset.x < minRotation) { RotationOffset.x = minRotation; }
+        else if(RotationOffset.x > maxRotation) {  RotationOffset.x = maxRotation; }
+
+        if (followPosition) { transform.position = Target.transform.TransformPoint(PositionOffset); }
         if (followRotation) { transform.rotation = Quaternion.Euler(Target.rotation.eulerAngles + RotationOffset); }
         if (followScale) { transform.localScale = Target.localScale + ScaleOffset; }
         

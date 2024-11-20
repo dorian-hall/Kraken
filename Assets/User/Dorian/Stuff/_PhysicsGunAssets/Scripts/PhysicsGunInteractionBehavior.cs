@@ -157,6 +157,7 @@ public class PhysicsGunInteractionBehavior : MonoBehaviour
     [Serializable]
     public class BoolEvent : UnityEvent<bool> { };
     [Serializable]
+
     public class GrabEvent : UnityEvent<GameObject> { };
 
     [Header("Events"), Space(10)]
@@ -398,6 +399,8 @@ public class PhysicsGunInteractionBehavior : MonoBehaviour
                     _lockedRot = _zeroVector2;
                 }
             }
+
+
             else
             {
                 //Rotate the object to remain consistent with any changes in player's rotation
@@ -562,8 +565,9 @@ public class PhysicsGunInteractionBehavior : MonoBehaviour
         StartPoint                                  = _zeroVector3;
         MidPoint                                    = _zeroVector3;
         EndPoint                                    = _zeroVector3;
-
+        
         OnObjectGrabbed.Invoke(null);
     }
+
 }
 

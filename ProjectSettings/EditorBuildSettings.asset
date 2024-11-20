@@ -11,4 +11,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/User/Dorian/Scenes/movement enviorment.unity
     guid: 3f80a809b8d68134490d199ba3661e4c
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: f19924661e6dd7342b8402592a532913,
+      type: 2}

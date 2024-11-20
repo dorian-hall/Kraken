@@ -38,9 +38,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Jump"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""854efb45-638b-4180-b84b-057d63516c9e"",
-                    ""expectedControlType"": ""Axis"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -59,6 +59,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""type"": ""Button"",
                     ""id"": ""f85466e4-993e-421c-9185-5c1cdba322ff"",
                     ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Power"",
+                    ""type"": ""Button"",
+                    ""id"": ""3eb3c141-b995-46af-88a7-ee517f38fa0e"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -152,6 +161,17 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""Exit"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cb4f4b8b-28c6-4ea9-936e-419f6fef73ab"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Power"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -164,6 +184,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_actionmap_Jump = m_actionmap.FindAction("Jump", throwIfNotFound: true);
         m_actionmap_Restart = m_actionmap.FindAction("Restart", throwIfNotFound: true);
         m_actionmap_Exit = m_actionmap.FindAction("Exit", throwIfNotFound: true);
+        m_actionmap_Power = m_actionmap.FindAction("Power", throwIfNotFound: true);
     }
 
     ~@Controls()
@@ -234,6 +255,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputAction m_actionmap_Jump;
     private readonly InputAction m_actionmap_Restart;
     private readonly InputAction m_actionmap_Exit;
+    private readonly InputAction m_actionmap_Power;
     public struct ActionmapActions
     {
         private @Controls m_Wrapper;
@@ -242,6 +264,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_actionmap_Jump;
         public InputAction @Restart => m_Wrapper.m_actionmap_Restart;
         public InputAction @Exit => m_Wrapper.m_actionmap_Exit;
+        public InputAction @Power => m_Wrapper.m_actionmap_Power;
         public InputActionMap Get() { return m_Wrapper.m_actionmap; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -263,6 +286,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Exit.started += instance.OnExit;
             @Exit.performed += instance.OnExit;
             @Exit.canceled += instance.OnExit;
+            @Power.started += instance.OnPower;
+            @Power.performed += instance.OnPower;
+            @Power.canceled += instance.OnPower;
         }
 
         private void UnregisterCallbacks(IActionmapActions instance)
@@ -279,6 +305,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Exit.started -= instance.OnExit;
             @Exit.performed -= instance.OnExit;
             @Exit.canceled -= instance.OnExit;
+            @Power.started -= instance.OnPower;
+            @Power.performed -= instance.OnPower;
+            @Power.canceled -= instance.OnPower;
         }
 
         public void RemoveCallbacks(IActionmapActions instance)
@@ -302,5 +331,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnRestart(InputAction.CallbackContext context);
         void OnExit(InputAction.CallbackContext context);
+        void OnPower(InputAction.CallbackContext context);
     }
 }
