@@ -22,10 +22,10 @@ public class Thrower : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _PhysGun.OnObjectGrabbed.AddListener(onGrabed);
+        _PhysGun.OnObjectGrabbed.AddListener(GrabCheck);
     }
 
-    void onGrabed( GameObject gameObject )
+    void GrabCheck( GameObject gameObject )
     {
         if(gameObject != null){ Grabed(gameObject); }
         else { Throw(); }

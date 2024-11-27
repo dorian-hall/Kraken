@@ -8,6 +8,7 @@ public class Movement : MonoBehaviour
 {
     [SerializeField] float moveSpeed = 6; // move speed
     [SerializeField] float lerpSpeed = 10; // smoothing speed
+    [SerializeField] float RotationSpeed = 10; 
     [SerializeField] float gravity = 10; // gravity acceleration
     [SerializeField] bool isGrounded;
     [SerializeField] float deltaGround = 0.2f; // character is grounded up to this distance
@@ -18,10 +19,16 @@ public class Movement : MonoBehaviour
     [SerializeField] float distGround; // distance from character position to ground
     [SerializeField] bool jumping = false; // flag "I'm jumping to wall"
     [SerializeField] float vertSpeed = 0; // vertical jump current speed
+    [SerializeField] LayerMask layerMask;
     private Rigidbody rigidbody;
     private Transform myTransform;
     public BoxCollider boxCollider; // drag BoxCollider ref in editor
     private Controls _controls;
+
+    private Ray WallRay;
+    private Ray GroundRay;
+    private Ray CliffRay;
+
     private void Awake()
     {
         _controls = new Controls();
@@ -58,31 +65,45 @@ public class Movement : MonoBehaviour
     {
         // jump code - jump to wall or simple jump
         if (jumping) return; // abort Update while jumping to a wall
-
-        Ray ray;
         RaycastHit hit;
 
-        ray = new Ray(myTransform.position, myTransform.forward);
-        if (Physics.Raycast(ray, out hit, 1))
+        WallRay = new Ray(myTransform.position, myTransform.forward);
+        if (Physics.Raycast(WallRay, out hit, 1,layerMask))
         { // wall ahead?
             JumpToWall(hit.point, hit.normal); // yes: jump to the wall
         }
 
         // update surface normal and isGrounded:
 
-        ray = new Ray(myTransform.position, -myNormal); // cast ray downwards
-        if (Physics.Raycast(ray, out hit))
+        GroundRay = new Ray(myTransform.position, -myNormal); // cast ray downwards
+        CliffRay = new Ray(myTransform.TransformPoint(new Vector3(0, -1, 0)), -myTransform.forward);
+        if (Physics.Raycast(GroundRay, out hit,1,layerMask))
         { // use it to update myNormal and isGrounded
             isGrounded = hit.distance <= distGround + deltaGround;
             surfaceNormal = hit.normal;
         }
         else
         {
-            isGrounded = false;
-            // assume usual ground normal to avoid "falling forever"
-            surfaceNormal = Vector3.up;
+           
+            if (Physics.Raycast(CliffRay, out hit, 1, layerMask))
+            {
+                JumpToWall(hit.point, hit.normal); // yes: jump to the wall
+            }
+            else
+            {
+                isGrounded = false;
+                // assume usual ground normal to avoid "falling forever"
+                surfaceNormal = Vector3.up;
+            }
         }
-        myNormal = Vector3.Lerp(myNormal, surfaceNormal, lerpSpeed * Time.deltaTime);
+
+        CliffRay = new Ray(myTransform.TransformPoint(new Vector3(0,-1,0)), -myTransform.forward);
+        if(Physics.Raycast(CliffRay,out hit,1,layerMask))
+        {
+
+        }
+
+            myNormal = Vector3.Lerp(myNormal, surfaceNormal, lerpSpeed * Time.deltaTime);
         // find forward direction with new myNormal:
         Vector3 myForward = Vector3.Cross(myTransform.right, myNormal);
         // align character to the new myNormal while keeping the forward direction:
@@ -103,7 +124,7 @@ public class Movement : MonoBehaviour
 
         Vector3 cameraForwardProjected = Vector3.ProjectOnPlane(loockdirection, myNormal).normalized;
         Quaternion targetRot = Quaternion.LookRotation(cameraForwardProjected, myNormal);
-        myTransform.rotation = Quaternion.Lerp(myTransform.rotation, targetRot, lerpSpeed * Time.deltaTime);
+        myTransform.rotation = Quaternion.Lerp(myTransform.rotation, targetRot, RotationSpeed * Time.deltaTime);
 
         // move the character forth/back with Vertical axis:
 
@@ -146,6 +167,20 @@ public class Movement : MonoBehaviour
         jumping = false; // jumping to wall finished
 
     }
+
+    private void OnDrawGizmos()
+    {
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(WallRay);
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawRay(GroundRay);
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawRay(CliffRay);
+    }
+
     private void OnEnable(){ _controls.Enable();}
     private void OnDisable(){ _controls.Disable();}
 }
