@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5845084472310819911}
   - component: {fileID: 1291824058687436640}
   - component: {fileID: 5280078662431467549}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: FreePotBigLid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,13 +26,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2095539067200686615}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0.13069089, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3245793456012145784}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5845084472310819911
 MeshFilter:
@@ -92,9 +92,17 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2095539067200686615}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Size: {x: 0.21341184, y: 0.03332095, z: 0.21341184}
   m_Center: {x: 0.000000011175871, y: 0.016660474, z: 0.0000000037252903}
 --- !u!1 &2756360610627481282
@@ -106,7 +114,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3245793456012145784}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: FreePotBig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120,6 +128,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2756360610627481282}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -128,7 +137,6 @@ Transform:
   - {fileID: 6639939464902420633}
   - {fileID: 1281081379482231387}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7195026186332551961
 GameObject:
@@ -142,7 +150,7 @@ GameObject:
   - component: {fileID: 4005105116333027698}
   - component: {fileID: 1797940380248042914}
   - component: {fileID: 8924735456811622032}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: FreePotBig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -156,13 +164,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7195026186332551961}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3245793456012145784}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4005105116333027698
 MeshFilter:
@@ -222,8 +230,16 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7195026186332551961}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Size: {x: 0.29999998, y: 0.1345924, z: 0.21341184}
   m_Center: {x: 0.000000074505806, y: 0.067296244, z: 0.000000026077032}

@@ -225,7 +225,7 @@ public class PhysicsGunInteractionBehavior : MonoBehaviour
                 {
                     // Track rigidbody's initial information
                     _grabbedRigidbody                   = hit.rigidbody;
-                    _wasKinematic                       = _grabbedRigidbody.isKinematic;
+                    _wasKinematic                       = false;
                     _grabbedRigidbody.isKinematic       = false;
                     _grabbedRigidbody.freezeRotation    = true;
                     _initialInterpolationSetting        = _grabbedRigidbody.interpolation;

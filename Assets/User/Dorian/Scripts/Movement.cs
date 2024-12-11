@@ -17,7 +17,7 @@ public class Movement : MonoBehaviour
     [SerializeField] Vector3 surfaceNormal; // current surface normal
     [SerializeField] Vector3 myNormal; // character normal
     [SerializeField] float distGround; // distance from character position to ground
-    [SerializeField] bool jumping = false; // flag "I'm jumping to wall"
+    [SerializeField] bool Lerping = false; // flag "I'm jumping to wall"
     [SerializeField] float vertSpeed = 0; // vertical jump current speed
     [SerializeField] LayerMask layerMask;
     private Rigidbody rigidbody;
@@ -64,7 +64,7 @@ public class Movement : MonoBehaviour
     private void Update()
     {
         // jump code - jump to wall or simple jump
-        if (jumping) return; // abort Update while jumping to a wall
+        if (Lerping) return; // abort Update while jumping to a wall
         RaycastHit hit;
 
         WallRay = new Ray(myTransform.position, myTransform.forward);
@@ -138,7 +138,7 @@ public class Movement : MonoBehaviour
     private void JumpToWall(Vector3 point, Vector3 normal)
     {
         // jump to wall
-        jumping = true; // signal it's jumping to wall
+        Lerping = true; // signal it's jumping to wall
         
         rigidbody.isKinematic = true; // disable physics while jumping
         Vector3 orgPos = myTransform.position;
@@ -164,7 +164,7 @@ public class Movement : MonoBehaviour
         }
         myNormal = normal; // update myNormal
         rigidbody.isKinematic = false; // enable physics
-        jumping = false; // jumping to wall finished
+        Lerping = false; // jumping to wall finished
 
     }
 
