@@ -195,7 +195,7 @@ public class PhysicsGunInteractionBehavior : MonoBehaviour
 
 	private void Update ()
     {
-        if (!Input.GetMouseButton(0))
+        if (!Input.GetMouseButton(1))
         {
             // We are not holding the mouse button. Release the object and return before checking for a new one
             if (_grabbedRigidbody != null)
@@ -207,13 +207,20 @@ public class PhysicsGunInteractionBehavior : MonoBehaviour
             return;
         }
 
+        if (Input.GetMouseButton(0)&& _grabbedRigidbody != null)
+        {
+            _grabbedRigidbody.velocity = Camera.main.ScreenPointToRay(Input.mousePosition).direction * 50;
+            ReleaseObject();
+            return;
+        }
         if (_grabbedRigidbody == null && !_justReleased)
         {
 
             // We are not holding an object, look for one to pick up
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-                       
+            
+  
             //Just so These aren't included in a build
 #if UNITY_EDITOR
             Debug.DrawRay(ray.origin, ray.direction * _maxGrabDistance, Color.blue, 0.01f);
@@ -332,15 +339,6 @@ public class PhysicsGunInteractionBehavior : MonoBehaviour
                 _scrollWheelInput = _zeroVector3;
             }
 
-            if(Input.GetMouseButtonDown(1))
-            {
-                //To prevent warnings in the inpector
-                _grabbedRigidbody.collisionDetectionMode    = !_wasKinematic ? CollisionDetectionMode.ContinuousSpeculative : CollisionDetectionMode.Continuous;
-                _grabbedRigidbody.isKinematic               = _wasKinematic = !_wasKinematic;
-               
-                _justReleased = true;
-                ReleaseObject();
-            }
         }
 	}
 

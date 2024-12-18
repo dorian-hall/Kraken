@@ -58,7 +58,7 @@ public class Movement : MonoBehaviour
     {
         if (isGrounded)
         { // no: if grounded, jump up
-            rigidbody.velocity += jumpSpeed * Camera.main.transform.up;
+            rigidbody.velocity += jumpSpeed * transform.up;
         }
     }
     private void Update()
@@ -67,11 +67,6 @@ public class Movement : MonoBehaviour
         if (Lerping) return; // abort Update while jumping to a wall
         RaycastHit hit;
 
-        WallRay = new Ray(myTransform.position, myTransform.forward);
-        if (Physics.Raycast(WallRay, out hit, 1,layerMask))
-        { // wall ahead?
-            JumpToWall(hit.point, hit.normal); // yes: jump to the wall
-        }
 
         // update surface normal and isGrounded:
 
@@ -87,7 +82,7 @@ public class Movement : MonoBehaviour
            
             if (Physics.Raycast(CliffRay, out hit, 1, layerMask))
             {
-                JumpToWall(hit.point, hit.normal); // yes: jump to the wall
+                surfaceNormal = hit.normal;
             }
             else
             {
@@ -96,19 +91,20 @@ public class Movement : MonoBehaviour
                 surfaceNormal = Vector3.up;
             }
         }
-
-        CliffRay = new Ray(myTransform.TransformPoint(new Vector3(0,-1,0)), -myTransform.forward);
-        if(Physics.Raycast(CliffRay,out hit,1,layerMask))
-        {
-
+        WallRay = new Ray(myTransform.position, myTransform.forward);
+        if (Physics.Raycast(WallRay, out hit, 1, layerMask))
+        { // wall ahead?
+            surfaceNormal = hit.normal;
         }
 
-            myNormal = Vector3.Lerp(myNormal, surfaceNormal, lerpSpeed * Time.deltaTime);
+
+        myNormal = Vector3.Lerp(myNormal, surfaceNormal, lerpSpeed * Time.deltaTime);
         // find forward direction with new myNormal:
         Vector3 myForward = Vector3.Cross(myTransform.right, myNormal);
         // align character to the new myNormal while keeping the forward direction:
         // Modify the update block where rotation is set
         Vector2 moveinput = _controls.actionmap.Movemnet.ReadValue<Vector2>().normalized;
+        
         Vector3 loockdirection;
         if (moveinput != Vector2.zero)
         {
